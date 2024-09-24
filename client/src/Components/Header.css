@@ -1,0 +1,39 @@
+/* Header.css */
+.navbar1 {
+  background-color: #0053A0; /* Olympic blue */
+  padding: 15px;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo {
+  width: 40px; /* Adjust the size of the logo as needed */
+  height: auto;
+}
+
+.navbar-links {
+  display: flex;
+}
+
+.nav-link {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
