@@ -1,9 +1,12 @@
 /* Header.css */
 .navbar1 {
-  background-color: #0053A0; /* Olympic blue */
+  background-color: #212a31; /* Olympic blue */
   padding: 15px;
 }
 
+.bg-col {
+  background-color: #0C0404;
+}
 .navbar-container {
   display: flex;
   justify-content: space-between;
