@@ -6,7 +6,6 @@ export default function Footer() {
   return (
     <Box
       sx={{
-        // backgroundColor: "", // Blue background
         color: "#fff",
         padding: "20px 0",
         marginTop: "auto",

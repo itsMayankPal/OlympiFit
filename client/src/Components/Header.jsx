@@ -93,17 +93,17 @@ const Header = () => {
           </ul>
         </div>
 
-        {/* "Join Now" Button always visible, outside the navbar-collapse */}
         <div className="d-none d-lg-block">
-          <Link className="nav-link text-light" to={"Developers"}>
+          <Link className="nav-link text-light" to={"/Register"}>
+            {/* Updated the link to '/Register' */}
             <Button variant="contained" size="large" color="success">
               Join Now
             </Button>
           </Link>
         </div>
-        {/* Mobile-specific "Join Now" button */}
+
         <div className="d-lg-none">
-          <Link className="nav-link text-light" to={"Developers"}>
+          <Link className="nav-link text-light" to={"/Register"}>
             <Button variant="contained" size="small" color="success">
               Join Now
             </Button>

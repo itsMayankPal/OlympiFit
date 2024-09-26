@@ -1,6 +1,6 @@
 /* Header.css */
 .navbar1 {
-  background-color: #212a31; /* Olympic blue */
+  background-color: #212a31; 
   padding: 15px;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .logo {
-  width: 40px; /* Adjust the size of the logo as needed */
+  width: 40px; 
   height: auto;
 }
 

@@ -4,7 +4,7 @@ body {
   background: linear-gradient(100deg, #20296a, #184b8d, #1f2e71);
 }
 
-/* Responsive Design */
+
 @media (max-width: 992px) {
   .main-container {
     flex-direction: column;
@@ -13,11 +13,10 @@ body {
 
 @media (max-width: 768px) {
   .running-animation {
-    width: 100%; /* Full width for mobile */
+    width: 100%; 
   }
 }
 
-/* Image Animation */
 @keyframes run-to-screen {
   0% {
     transform: translateX(100%);
@@ -29,7 +28,7 @@ body {
   }
 }
 
-/* Text Styles */
+
 .t-1 {
   font-size: 4vw;
   color: white;

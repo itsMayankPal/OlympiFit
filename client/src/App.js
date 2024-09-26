@@ -1,12 +1,11 @@
 import "./App.css";
 
 import Home from "./Pages/Home";
-import Progress from "./Pages/Progress";
+import Dashboard from "./Pages/Dashboard";
 import Leaderboard from "./Pages/Leaderboard";
 import Challenges from "./Pages/Challenges";
+import Register from "./Pages/Register";
 import Main from "./Main";
-
-// import User from './components/User';
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -24,16 +23,20 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: "Progress", // relative path
-        element: <Progress />,
+        path: "Dashboard",
+        element: <Dashboard />,
       },
       {
-        path: "Leaderboard", // relative path
+        path: "Leaderboard",
         element: <Leaderboard />,
       },
       {
-        path: "Challenges", // relative path
+        path: "Challenges",
         element: <Challenges />,
+      },
+      {
+        path: "Register",
+        element: <Register />,
       },
     ],
   },

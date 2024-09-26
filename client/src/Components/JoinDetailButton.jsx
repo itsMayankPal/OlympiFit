@@ -96,7 +96,6 @@ const JoinDetailButton = () => {
                   {challenge.progress}% Completed
                 </Typography>
 
-                {/* Dynamic Button */}
                 {challenge.isJoined ? (
                   <Button variant="outlined" color="secondary">
                     View Details

@@ -19,7 +19,7 @@ const Top3Lead = ({ topThree }) => {
             sx={{
               textAlign: "center",
               p: 2,
-              border: "2px solid #C0C0C0", // Silver for 2nd place
+              border: "2px solid #C0C0C0",
               borderRadius: "12px",
               backgroundColor: "#f9f9f9",
             }}
@@ -46,15 +46,14 @@ const Top3Lead = ({ topThree }) => {
           </Box>
         </Grid>
 
-        {/* First Place - Center and Larger */}
         <Grid item xs={12} sm={4}>
           <Box
             sx={{
               textAlign: "center",
               p: 2,
-              border: "2px solid #FFD700", // Gold for 1st place
+              border: "2px solid #FFD700",
               borderRadius: "12px",
-              backgroundColor: "#fdf5e6", // Slight gold tone
+              backgroundColor: "#fdf5e6",
             }}
           >
             <Avatar

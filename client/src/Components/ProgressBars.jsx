@@ -46,7 +46,6 @@ const challengesData = [
     description: "Take part in a 50km cycling race!",
     progress: 20,
   },
-  // Add more challenges...
 ];
 
 const ProgressBars = () => {

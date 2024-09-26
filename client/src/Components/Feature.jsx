@@ -4,7 +4,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 export default function Features() {
   return (
-    // Box to handle full-width background color
     <Box sx={{ backgroundColor: "#282c34", padding: "50px 0", width: "100%" }}>
       {/* Center the content within a Container */}
       <Container>

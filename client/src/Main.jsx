@@ -7,7 +7,6 @@ import History from "./Components/History";
 import Features from "./Components/Feature";
 import Faqs from "./Components/Faqs";
 import MainContent from "./Components/MainContent";
-import Footer from "./Components/Footer";
 
 function Main() {
   return (
@@ -16,7 +15,6 @@ function Main() {
       <History></History>
       <Features></Features>
       <Faqs></Faqs>
-      <Footer></Footer>
     </>
   );
 }

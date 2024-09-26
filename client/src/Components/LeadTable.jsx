@@ -157,7 +157,7 @@ const leaderboardData = [
 ];
 
 export default function LeadTable() {
-  const topThree = leaderboardData.slice(0, 3); // Get the top 3 participants
+  const topThree = leaderboardData.slice(0, 3);
   return (
     <>
       <Top3Lead topThree={topThree}></Top3Lead>

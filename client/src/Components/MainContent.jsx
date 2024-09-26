@@ -5,14 +5,13 @@ import myImage from "../Assets/bgImg.png";
 export default function MainContent() {
   return (
     <Container sx={{ marginY: 4 }}>
-      {/* Background Box with Transparency */}
       <Box
         sx={{
           position: "relative",
           overflow: "hidden",
           backgroundImage: {
             // xs: `url(${athleteImage})`, // Use athlete image for mobile
-            sm: `url(${myImage})`, // Use background image for larger screens
+            sm: `url(${myImage})`, // Use background wimage for larger screens
           },
           backgroundSize: "cover",
           backgroundPosition: "center",
