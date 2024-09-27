@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   Button,
-  Avatar,
   Grid,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";

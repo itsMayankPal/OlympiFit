@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Update to useNavigate
+// import { useNavigate } from "react-router-dom"; // Update to useNavigate
 import {
   Stepper,
   Step,
@@ -19,8 +19,9 @@ import {
 
 const steps = ["Register", "Personal Details"];
 
-const RegisterForm = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+const RegisterForm = ({ onSuccess }) => {
+  // Accept onSuccess prop
+  // const navigate = useNavigate(); // Initialize useNavigate
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -86,8 +87,7 @@ const RegisterForm = () => {
         if (response.ok) {
           setFormStatus("success");
           resetForm();
-          // Redirect to the dashboard
-          navigate("/dashboard"); // Change to your dashboard route
+          onSuccess(); // Call the onSuccess function to toggle to sign-in
         } else {
           setErrorMessage(data.error || "Failed to register");
           setFormStatus("error");

@@ -1,4 +1,3 @@
-// src/Pages/Register.js
 import React, { useState } from "react";
 import RegisterForm from "../Components/RegisterForm"; // Assuming the form is in the components folder
 import SignInForm from "../Components/SignInForm"; // Import the new SignInForm component
@@ -9,6 +8,10 @@ const Register = () => {
 
   const toggleForm = () => {
     setIsSignUp((prev) => !prev); // Toggle between Sign Up and Sign In
+  };
+
+  const handleRegistrationSuccess = () => {
+    setIsSignUp(false); // Switch to Sign In form after successful registration
   };
 
   return (
@@ -22,7 +25,11 @@ const Register = () => {
       >
         {isSignUp ? "Switch to Sign In" : "Switch to Sign Up"}
       </Button>
-      {isSignUp ? <RegisterForm /> : <SignInForm />}
+      {isSignUp ? (
+        <RegisterForm onSuccess={handleRegistrationSuccess} />
+      ) : (
+        <SignInForm />
+      )}
     </div>
   );
 };
