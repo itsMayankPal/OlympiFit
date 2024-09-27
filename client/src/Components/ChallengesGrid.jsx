@@ -1,4 +1,6 @@
-import React from "react";
+// ChallengesGrid.jsx
+
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Card,
@@ -7,43 +9,39 @@ import {
   Button,
   Box,
 } from "@mui/material";
-
-const challengesData = [
-  {
-    id: 1,
-    title: "100m Sprint",
-    description: "Race to the finish line in under 10 seconds!",
-  },
-  {
-    id: 2,
-    title: "Marathon Run",
-    description: "Complete a full marathon in record time!",
-  },
-  {
-    id: 3,
-    title: "Weightlifting",
-    description: "Lift the heaviest weights and set new records!",
-  },
-  {
-    id: 4,
-    title: "Long Jump",
-    description: "Achieve the longest jump distance!",
-  },
-  {
-    id: 5,
-    title: "Swimming",
-    description: "Complete the swimming challenge with speed and endurance!",
-  },
-  { id: 6, title: "Cycling", description: "Take part in a 50km cycling race!" },
-  // Add more challenges...
-];
+import axios from "axios"; // Import axios to fetch data from API
 
 const ChallengesGrid = () => {
+  const [challenges, setChallenges] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch challenges from the backend API
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3002/api/challenges"
+        );
+        setChallenges(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load challenges.");
+        setLoading(false);
+      }
+    };
+
+    fetchChallenges();
+  }, []);
+
+  if (loading) return <Typography>Loading challenges...</Typography>;
+  if (error) return <Typography>{error}</Typography>;
+
   return (
     <Box sx={{ p: 4 }}>
       <Grid container spacing={4}>
-        {challengesData.map((challenge) => (
-          <Grid item xs={12} sm={6} md={4} key={challenge.id}>
+        {challenges.map((challenge) => (
+          <Grid item xs={12} sm={6} md={4} key={challenge._id}>
             <Card
               sx={{
                 backgroundColor: "#f5f5f5",

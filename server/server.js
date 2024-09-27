@@ -1,20 +1,33 @@
 const express = require("express");
-const connectDB = require("./Config/database"); // Database connection
 const cors = require("cors");
-const userRoutes = require("./Routes/userRoutes"); // Import your user routes
+const mongoose = require("mongoose");
+const dotenv = require("dotenv"); // For environment variables
+
+// Routes imports
+const userRoutes = require("./Routes/userRoutes");
+const challengesRoute = require("./Routes/ChallengeRoutes");
+
+// Load environment variables from .env
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB using the environment variable
+const mongoURI = process.env.MONGO_URI;
 
-// Use middlewares
-app.use(cors());
-app.use(express.json());
+mongoose
+  .connect(mongoURI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error: ", err));
 
-// Set up routes
-app.use("/api/users", userRoutes); // Base URL for user routes
+// Middleware
+app.use(cors()); // Enable CORS
+app.use(express.json()); // Enable JSON parsing
+
+// API Routes
+app.use("/api/users", userRoutes); // User-related routes
+app.use("/api/challenges", challengesRoute); // Challenge-related routes
 
 // Test Route
 app.get("/", (req, res) => {

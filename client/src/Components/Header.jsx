@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useContext, useEffect } from "react"; // Import useContext
+import { AuthContext } from "../AuthContext"; // Correctly import AuthContext as a named export
 import logo from "../Assets/OLYMIFIT.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import PoolIcon from "@mui/icons-material/Pool";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import InsightsIcon from "@mui/icons-material/Insights";
+import Diversity2Icon from "@mui/icons-material/Diversity2";
 import "./Header.css";
 
 const Header = () => {
+  const { isAuthenticated, handleLogout, userId } = useContext(AuthContext); // Get userId from context
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  // Check the authentication state
+  useEffect(() => {
+    console.log("Header component rendered");
+    console.log("Authenticated:", isAuthenticated);
+  }, [isAuthenticated]);
+
+  const handleDashboardClick = () => {
+    if (userId) {
+      navigate(`/dashboard/${userId}`); // Navigate to the dashboard using userId
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-col">
       <div className="container d-flex justify-content-between">
@@ -79,36 +95,45 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item mx-3">
-              <Link className="nav-link text-light" to={"Progress"}>
+              <Link className="nav-link text-light" to={"about-us"}>
                 <Button
                   variant="outlined"
                   size="large"
                   color="success"
-                  startIcon={<InsightsIcon />}
+                  startIcon={<Diversity2Icon />}
                 >
-                  Progress
+                  About Us
                 </Button>
               </Link>
             </li>
           </ul>
         </div>
 
-        <div className="d-none d-lg-block">
+        {/* Conditional rendering based on authentication status */}
+        {isAuthenticated ? (
+          <Button
+            className="nav-link text-light"
+            variant="contained"
+            size="large"
+            color="success"
+            onClick={handleDashboardClick} // Use handleDashboardClick
+          >
+            Dashboard
+          </Button>
+        ) : (
           <Link className="nav-link text-light" to={"/Register"}>
-            {/* Updated the link to '/Register' */}
             <Button variant="contained" size="large" color="success">
               Join Now
             </Button>
           </Link>
-        </div>
+        )}
 
-        <div className="d-lg-none">
-          <Link className="nav-link text-light" to={"/Register"}>
-            <Button variant="contained" size="small" color="success">
-              Join Now
-            </Button>
-          </Link>
-        </div>
+        {/* Logout button for testing */}
+        {isAuthenticated && (
+          <Button onClick={handleLogout} variant="outlined" color="error">
+            Logout
+          </Button>
+        )}
       </div>
     </nav>
   );

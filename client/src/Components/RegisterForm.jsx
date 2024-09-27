@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Update to useNavigate
 import {
   Stepper,
   Step,
@@ -19,6 +20,7 @@ import {
 const steps = ["Register", "Personal Details"];
 
 const RegisterForm = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -35,9 +37,25 @@ const RegisterForm = () => {
 
   const [formStatus, setFormStatus] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      age: "",
+      weight: "",
+      gender: "",
+      height: "",
+      targetWeight: "",
+      targetMonths: "",
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -50,25 +68,35 @@ const RegisterForm = () => {
       }
 
       // Send form data to the backend
+      setIsSubmitting(true);
       try {
-        const response = await fetch("/api/users/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
+        const response = await fetch(
+          "http://localhost:3002/api/users/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+
+        const data = await response.json();
 
         if (response.ok) {
           setFormStatus("success");
+          resetForm();
+          // Redirect to the dashboard
+          navigate("/dashboard"); // Change to your dashboard route
         } else {
-          const data = await response.json();
           setErrorMessage(data.error || "Failed to register");
           setFormStatus("error");
         }
       } catch (error) {
-        setErrorMessage("Server error");
+        setErrorMessage("Server error. Please try again later.");
         setFormStatus("error");
+      } finally {
+        setIsSubmitting(false);
       }
     } else {
       handleNext();
@@ -139,8 +167,13 @@ const RegisterForm = () => {
               <Button disabled={activeStep === 0} onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" variant="contained" color="primary">
-                Next
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={isSubmitting}
+              >
+                {activeStep === steps.length - 1 ? "Submit" : "Next"}
               </Button>
             </Box>
           </form>
@@ -243,7 +276,12 @@ const RegisterForm = () => {
 
             <Box display="flex" justifyContent="space-between">
               <Button onClick={handleBack}>Back</Button>
-              <Button type="submit" variant="contained" color="primary">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={isSubmitting}
+              >
                 Submit
               </Button>
             </Box>

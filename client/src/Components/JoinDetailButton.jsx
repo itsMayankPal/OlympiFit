@@ -1,3 +1,5 @@
+// JoinDetailButton.jsx
+
 import React, { useState } from "react";
 import {
   Grid,

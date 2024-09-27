@@ -17,12 +17,13 @@ const data = [
   { name: "Apr", weight: 65 },
 ];
 
-const DashboardContent = () => {
+const DashboardContent = ({ user }) => {
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>
-        Welcome to Your Dashboard
+      <Typography variant="h4">
+        Welcome to Your Dashboard, {user.name}
       </Typography>
+      <Typography variant="subtitle1">Email: {user.email}</Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Paper elevation={3} style={{ padding: "20px" }}>
@@ -50,7 +51,6 @@ const DashboardContent = () => {
             <Typography variant="body1">
               You are on track with your weight loss goal!
             </Typography>
-            {/* Add more dynamic content here */}
           </Paper>
         </Grid>
       </Grid>
