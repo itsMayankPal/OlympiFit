@@ -66,10 +66,6 @@ const App = () => {
           element: <Leaderboard />,
         },
         {
-          path: "/Dashboard",
-          element: <Dashboard />,
-        },
-        {
           path: "/challenges",
           element: <Challenges />,
         },

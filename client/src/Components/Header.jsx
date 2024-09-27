@@ -10,7 +10,7 @@ import Diversity2Icon from "@mui/icons-material/Diversity2";
 import "./Header.css";
 
 const Header = () => {
-  const { isAuthenticated, handleLogout, userId } = useContext(AuthContext); // Get userId from context
+  const { isAuthenticated, userId } = useContext(AuthContext); // Get userId from context
   const navigate = useNavigate(); // Initialize useNavigate
 
   // Check the authentication state
@@ -129,11 +129,6 @@ const Header = () => {
         )}
 
         {/* Logout button for testing */}
-        {isAuthenticated && (
-          <Button onClick={handleLogout} variant="outlined" color="error">
-            Logout
-          </Button>
-        )}
       </div>
     </nav>
   );

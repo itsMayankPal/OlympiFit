@@ -13,12 +13,12 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext"; // Corrected path for useAuth
 
 const Challenges = () => {
-  const { isAuthenticated, userId } = useAuth(); // Access authentication state
+  const { isAuthenticated, userId } = useAuth();
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userChallenges, setUserChallenges] = useState([]);
-  const [joining, setJoining] = useState(false); // State for joining challenge
+  const [joining, setJoining] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +38,30 @@ const Challenges = () => {
     fetchChallenges();
   }, []);
 
+  useEffect(() => {
+    const fetchUserChallenges = async () => {
+      if (isAuthenticated) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3002/api/users/user/${userId}`
+          );
+          const joinedChallenges = response.data.challengesJoined || [];
+          setUserChallenges(joinedChallenges);
+          setChallenges((prevChallenges) =>
+            prevChallenges.map((challenge) => ({
+              ...challenge,
+              isJoined: joinedChallenges.includes(challenge._id),
+            }))
+          );
+        } catch (err) {
+          console.error("Failed to load user challenges:", err);
+        }
+      }
+    };
+
+    fetchUserChallenges();
+  }, [isAuthenticated, userId]);
+
   const handleJoinChallenge = async (id) => {
     if (!isAuthenticated) {
       alert("Please log in to join challenges.");
@@ -45,10 +69,9 @@ const Challenges = () => {
       return;
     }
 
-    setJoining(true); // Set loading state
+    setJoining(true);
     try {
-      // eslint-disable-next-line
-      const response = await axios.put(
+      const response = await axios.post(
         `http://localhost:3002/api/challenges/joinChallenge`,
         {
           userId: userId,
@@ -56,24 +79,28 @@ const Challenges = () => {
         }
       );
 
-      // Update local state
-      setChallenges((prevChallenges) =>
-        prevChallenges.map((challenge) =>
-          challenge._id === id ? { ...challenge, isJoined: true } : challenge
-        )
-      );
-      setUserChallenges((prevUserChallenges) => [...prevUserChallenges, id]);
+      if (response.status === 200) {
+        setChallenges((prevChallenges) =>
+          prevChallenges.map((challenge) =>
+            challenge._id === id ? { ...challenge, isJoined: true } : challenge
+          )
+        );
+        setUserChallenges((prevUserChallenges) => [...prevUserChallenges, id]);
+      } else {
+        alert("Failed to join the challenge. Please try again.");
+      }
     } catch (error) {
-      console.error("Error joining challenge", error.response.data.message);
-      alert("Failed to join the challenge. Please try again later.");
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to join the challenge. Please try again later.";
+      console.error("Error joining challenge:", errorMessage);
+      alert(errorMessage);
     } finally {
-      setJoining(false); // Reset loading state
+      setJoining(false);
     }
   };
 
   const handleCancelChallenge = async (id) => {
-    // Implement cancel challenge logic here
-    // Example:
     if (!isAuthenticated) {
       alert("Please log in to cancel challenges.");
       navigate("/register");
@@ -81,8 +108,7 @@ const Challenges = () => {
     }
 
     try {
-      // eslint-disable-next-line
-      const response = await axios.put(
+      const response = await axios.post(
         `http://localhost:3002/api/challenges/cancelChallenge`,
         {
           userId: userId,
@@ -90,15 +116,18 @@ const Challenges = () => {
         }
       );
 
-      // Update local state
-      setChallenges((prevChallenges) =>
-        prevChallenges.map((challenge) =>
-          challenge._id === id ? { ...challenge, isJoined: false } : challenge
-        )
-      );
-      setUserChallenges((prevUserChallenges) =>
-        prevUserChallenges.filter((challengeId) => challengeId !== id)
-      );
+      if (response.status === 200) {
+        setChallenges((prevChallenges) =>
+          prevChallenges.map((challenge) =>
+            challenge._id === id ? { ...challenge, isJoined: false } : challenge
+          )
+        );
+        setUserChallenges((prevUserChallenges) =>
+          prevUserChallenges.filter((challengeId) => challengeId !== id)
+        );
+      } else {
+        alert("Failed to cancel the challenge. Please try again.");
+      }
     } catch (error) {
       console.error("Error canceling challenge", error.response.data.message);
       alert("Failed to cancel the challenge. Please try again later.");
@@ -111,9 +140,9 @@ const Challenges = () => {
   return (
     <Box sx={{ p: 4 }}>
       <Grid container spacing={4}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
+        {/* <Typography variant="h1" sx={{ mb: 2 }}>
           You have joined {userChallenges.length} challenges.
-        </Typography>
+        </Typography> */}
         {challenges.map((challenge) => (
           <Grid item xs={12} sm={6} md={4} key={challenge._id}>
             <Card
@@ -142,7 +171,7 @@ const Challenges = () => {
                   {challenge.progress}% Completed
                 </Typography>
 
-                {challenge.isJoined ? (
+                {userChallenges.includes(challenge._id) ? (
                   <Button
                     variant="outlined"
                     color="secondary"

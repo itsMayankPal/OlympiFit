@@ -1,9 +1,9 @@
 const express = require("express");
 const User = require("../Models/User");
-const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 
+// Register route
 // Register route
 router.post("/register", async (req, res) => {
   const {
@@ -19,18 +19,18 @@ router.post("/register", async (req, res) => {
   } = req.body;
 
   try {
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.log("User already exists");
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Hash the password using Argon2
-    const hashedPassword = await argon2.hash(password);
-
+    // Create new user with plain text password
     const newUser = new User({
       name,
       email,
-      password: hashedPassword,
+      password, // Save plain text password
       age,
       weight,
       gender,
@@ -39,7 +39,13 @@ router.post("/register", async (req, res) => {
       targetMonths,
     });
 
+    // Save the new user to the database
     await newUser.save();
+
+    // Log to confirm user was created successfully
+    console.log("User created successfully");
+
+    // Send success response
     res.status(201).json({
       message: "User registered successfully",
       user: {
@@ -54,30 +60,38 @@ router.post("/register", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error during user registration:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
 
 // Sign In Route
+// Sign In Route
+// Sign In Route
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if the user exists
-    const user = await User.findOne({ email });
+    // Log incoming email and password
+    console.log("Incoming email:", email);
+    console.log("Incoming password:", password);
+
+    // Check if the user exists and explicitly include the password field
+    const user = await User.findOne({ email }).select("+password");
+
+    // Log the user object
+    console.log("User found:", user);
+
     if (!user) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.status(400).json({ error: "User not found" });
     }
 
-    // Check if password is provided
-    if (!password) {
-      return res.status(400).json({ error: "Password is required" });
-    }
+    // Log the user password
+    console.log("User password from database:", user.password); // Should not be undefined
 
-    // Compare password with the hashed password in the database using Argon2
-    const isMatch = await argon2.verify(user.password, password);
-    if (!isMatch) {
+    // Compare the plain password
+    if (user.password !== password) {
+      console.log("Password does not match.");
       return res.status(400).json({ error: "Invalid email or password" });
     }
 
@@ -92,7 +106,7 @@ router.post("/signin", async (req, res) => {
       userId: user._id,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error during sign in:", error);
     res.status(500).json({ error: "Server error" });
   }
 });

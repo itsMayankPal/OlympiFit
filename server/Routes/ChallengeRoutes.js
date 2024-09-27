@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Challenge = require("../Models/Challenge");
 const User = require("../Models/User"); // Import User model
@@ -30,11 +31,17 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const { title, description, startDate, endDate } = req.body;
 
+  // Validate required fields
+  if (!title || !description || !startDate || !endDate) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
   const newChallenge = new Challenge({
     title,
     description,
     startDate,
     endDate,
+    participants: [], // Ensure participants array is initialized
   });
 
   try {
@@ -78,9 +85,12 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Route to handle joining a challenge
-router.post("/join/:challengeId", async (req, res) => {
+router.post("/joinChallenge", async (req, res) => {
   const { userId } = req.body; // Extract userId from request body
-  const { challengeId } = req.params;
+  const { challengeId } = req.body;
+  console.log(req.body);
+  console.log(userId);
+  console.log(challengeId);
 
   try {
     const challenge = await Challenge.findById(challengeId);
@@ -104,84 +114,54 @@ router.post("/join/:challengeId", async (req, res) => {
     challenge.participants.push(userId);
     await challenge.save();
 
-    user.challengesJoined.push(challengeId);
-    await user.save();
-
-    res.json({ message: "Challenge joined successfully", challenge, user });
-  } catch (error) {
-    res.status(500).json({ message: "Error joining challenge", error });
-  }
-});
-// Route to handle joining a challenge
-router.post("/join/:challengeId", async (req, res) => {
-  const { userId } = req.body; // Extract userId from request body
-  const { challengeId } = req.params;
-
-  try {
-    const challenge = await Challenge.findById(challengeId);
-    if (!challenge) {
-      return res.status(404).json({ message: "Challenge not found" });
-    }
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Check if user has already joined the challenge
-    if (challenge.participants.includes(userId)) {
-      return res
-        .status(400)
-        .json({ message: "User already joined this challenge" });
-    }
-
-    // Update challenge and user data
-    challenge.participants.push(userId);
-    await challenge.save();
-
-    user.challengesJoined.push(challengeId);
+    user.challengesJoined.push(challengeId); // Assuming challengesJoined is an array in User
     await user.save();
 
     res.json({ message: "Challenge joined successfully", challenge, user });
   } catch (error) {
     console.error("Error joining challenge:", error);
-    res.status(500).json({ message: "Error joining challenge" });
+    res.status(500).json({ message: "Error joining challenge", error });
   }
 });
 
-router.put("/joinChallenge", async (req, res) => {
+// Route to handle cancelling a challenge
+// Route to handle canceling a challenge
+router.post("/cancelChallenge", async (req, res) => {
   const { userId, challengeId } = req.body;
 
   try {
-    // Validate ObjectId
-    if (
-      !mongoose.Types.ObjectId.isValid(userId) ||
-      !mongoose.Types.ObjectId.isValid(challengeId)
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Invalid user ID or challenge ID." });
+    const challenge = await Challenge.findById(challengeId);
+    if (!challenge) {
+      return res.status(404).json({ message: "Challenge not found" });
     }
 
     const user = await User.findById(userId);
-    const challenge = await Challenge.findById(challengeId);
-
-    if (!user || !challenge) {
-      return res.status(404).json({ message: "User or Challenge not found." });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Logic to join the challenge (add challenge to user's challenges)
-    user.challenges.push(challengeId);
+    // Check if user is part of the challenge
+    if (!challenge.participants.includes(userId)) {
+      return res
+        .status(400)
+        .json({ message: "User has not joined this challenge" });
+    }
+
+    // Remove user from challenge and update user challenges
+    challenge.participants = challenge.participants.filter(
+      (id) => id.toString() !== userId
+    );
+    await challenge.save();
+
+    user.challengesJoined = user.challengesJoined.filter(
+      (id) => id.toString() !== challengeId
+    );
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "Successfully joined the challenge." });
+    res.json({ message: "Challenge canceled successfully", challenge, user });
   } catch (error) {
-    console.error("Error updating challenge:", error);
-    return res
-      .status(500)
-      .json({ message: "Server error. Please try again later.", error });
+    console.error("Error canceling challenge:", error);
+    res.status(500).json({ message: "Error canceling challenge", error });
   }
 });
 
