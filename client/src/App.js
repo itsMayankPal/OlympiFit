@@ -14,6 +14,8 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AboutUs from "./Pages/AboutUs";
+import FAQs from "./Components/Faqs";
+import History from "./Components/History";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -64,6 +66,14 @@ const App = () => {
         {
           path: "/leaderboard",
           element: <Leaderboard />,
+        },
+        {
+          path: "/FAQ",
+          element: <FAQs />,
+        },
+        {
+          path: "/Olympic-history",
+          element: <History />,
         },
         {
           path: "/challenges",

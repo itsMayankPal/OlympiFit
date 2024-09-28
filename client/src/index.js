@@ -8,7 +8,6 @@ import { AuthProvider } from "./AuthContext"; // Import the AuthProvider
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthProvider>
-    {/* Wrap your App with AuthProvider */}
     <App />
   </AuthProvider>
 );

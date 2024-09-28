@@ -218,9 +218,9 @@ const Dashboard = () => {
                       End Date:{" "}
                       {new Date(challenge.endDate).toLocaleDateString()}
                     </Typography>
-                    <Typography variant="body2">
+                    {/* <Typography variant="body2">
                       Participants: {challenge.participants}
-                    </Typography>
+                    </Typography> */}
                     <Typography variant="body2">
                       Progress: {challenge.progress}
                     </Typography>

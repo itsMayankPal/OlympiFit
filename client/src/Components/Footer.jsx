@@ -22,20 +22,17 @@ export default function Footer() {
             marginBottom: "10px",
           }}
         >
-          <Link href="/" color="inherit" sx={{ mx: 1 }}>
+          <Link href="/Home" color="inherit" sx={{ mx: 1 }}>
             Home
           </Link>
-          <Link href="/about" color="inherit" sx={{ mx: 1 }}>
+          <Link href="/Olympic-history" color="inherit" sx={{ mx: 1 }}>
             Olympic History
           </Link>
-          <Link href="/features" color="inherit" sx={{ mx: 1 }}>
+          <Link href="/Feature" color="inherit" sx={{ mx: 1 }}>
             Features
           </Link>
-          <Link href="/faq" color="inherit" sx={{ mx: 1 }}>
+          <Link href="/Faq" color="inherit" sx={{ mx: 1 }}>
             FAQ
-          </Link>
-          <Link href="/contact" color="inherit" sx={{ mx: 1 }}>
-            Contact
           </Link>
         </Box>
         <Box
